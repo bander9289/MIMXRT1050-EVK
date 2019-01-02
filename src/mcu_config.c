@@ -39,7 +39,7 @@ const mcu_board_config_t mcu_board_config = {
 			.rts = {0xff, 0xff}
 		},
 		.freq = 115200,
-		.o_flags = UART_FLAG_IS_PARITY_NONE | UART_FLAG_IS_STOP1,
+		.o_flags = UART_FLAG_SET_LINE_CODING | UART_FLAG_IS_PARITY_NONE | UART_FLAG_IS_STOP1,
 		.width = 8
 	},
 	.o_flags = MCU_BOARD_CONFIG_FLAG_LED_ACTIVE_HIGH,
