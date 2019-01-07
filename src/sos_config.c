@@ -39,6 +39,7 @@ limitations under the License.
 #include "config.h"
 #include "sl_config.h"
 #include "link_config.h"
+#include "link_transport_uart.h"
 
 
 //--------------------------------------------Stratify OS Configuration-------------------------------------------------
@@ -54,7 +55,7 @@ const sos_board_config_t sos_board_config = {
 	.sys_id = SL_CONFIG_DOCUMENT_ID,
 	.sys_memory_size = SOS_BOARD_SYSTEM_MEMORY_SIZE,
 	.start = sos_default_thread,
-	.start_args = &link_transport,
+	.start_args = &link_transport_uart,
 	.start_stack_size = SOS_DEFAULT_START_STACK_SIZE,
 	.socket_api = 0,
 	.request = 0,
@@ -82,31 +83,36 @@ SOS_DECLARE_TASK_TABLE(SOS_BOARD_TASK_TOTAL);
  *
  *
  */
-//USART2
-UARTFIFO_DECLARE_CONFIG_STATE(uart1_fifo, 1024,
+//LPUART1 - EVKB evaluation board has this wired to OpenSDA USB mbed endpoint
+UARTFIFO_DECLARE_CONFIG_STATE(uart0_fifo, 1024,
 										UART_FLAG_SET_LINE_CODING_DEFAULT, 8, 115200,
+										//BA: need to update pin assignments, configured through pin_mux.c for now
 										SOS_BOARD_USART2_RX_PORT, SOS_BOARD_USART2_RX_PIN, //RX
 										SOS_BOARD_USART2_TX_PORT, SOS_BOARD_USART2_TX_PIN, //TX
 										0xff, 0xff,
 										0xff, 0xff);
-#if !defined __debug
-//USART3
-UARTFIFO_DECLARE_CONFIG_STATE(uart2_fifo, 1024,
+
+#if !defined __debug //NOTE: opened for raw put() by mcu_debug mechanism if '__debug'
+//LPUART2 - conflicts with SPDIF; EVKB evaluation board has this on J22
+UARTFIFO_DECLARE_CONFIG_STATE(uart1_fifo, 1024,
 										UART_FLAG_SET_LINE_CODING_DEFAULT, 8, 115200,
+										//BA: see above
 										SOS_BOARD_USART3_RX_PORT, SOS_BOARD_USART3_RX_PIN, //RX
 										SOS_BOARD_USART3_TX_PORT, SOS_BOARD_USART3_TX_PIN, //TX
 										0xff, 0xff,
 										0xff, 0xff);
 #endif
 
-//USART6
-UARTFIFO_DECLARE_CONFIG_STATE(uart5_fifo, 1024,
+//LPUART3 - conflicts with CSI_xSYNC; EVKB evaluation board has this on J22
+UARTFIFO_DECLARE_CONFIG_STATE(uart2_fifo, 1024,
 										UART_FLAG_SET_LINE_CODING_DEFAULT, 8, 115200,
+										//BA: see above
 										SOS_BOARD_USART6_RX_PORT, SOS_BOARD_USART6_RX_PIN, //RX
 										SOS_BOARD_USART6_TX_PORT, SOS_BOARD_USART6_TX_PIN, //TX
 										0xff, 0xff,
 										0xff, 0xff);
 
+#if 0 //BA: not ready for this yet
 //I2C1
 I2C_DECLARE_CONFIG_MASTER(i2c0,
 								  I2C_FLAG_SET_MASTER,
@@ -120,7 +126,7 @@ I2C_DECLARE_CONFIG_MASTER(i2c1,
 								  100000,
 								  SOS_BOARD_I2C2_SDA_PORT, SOS_BOARD_I2C2_SDA_PIN, //SDA
 								  SOS_BOARD_I2C2_SCL_PORT, SOS_BOARD_I2C2_SCL_PIN); //SCL
-
+#endif
 
 
 
@@ -141,7 +147,9 @@ const devfs_device_t devfs_list[] = {
 	DEVFS_DEVICE("fifo", cfifo, 0, &board_fifo_config, &board_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("stdio-out", fifo, 0, &stdio_out_config, &stdio_out_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("stdio-in", fifo, 0, &stdio_in_config, &stdio_in_state, 0666, SOS_USER_ROOT, S_IFCHR),
+#if 0 //BA: not ready for this yet
 	DEVFS_DEVICE("link-phy-usb", usbfifo, SOS_BOARD_USB_PORT, &sos_link_transport_usb_fifo_cfg, &sos_link_transport_usb_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
+#endif
 	DEVFS_DEVICE("sys", sys, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	//DEVFS_DEVICE("rtc", mcu_rtc, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 
@@ -149,6 +157,7 @@ const devfs_device_t devfs_list[] = {
 	DEVFS_DEVICE("core", mcu_core, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("core0", mcu_core, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 
+#if 0 //BA: not ready for this yet
 	DEVFS_DEVICE("i2c0", mcu_i2c, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("i2c1", mcu_i2c, 1, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("i2c2", mcu_i2c, 2, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
@@ -167,22 +176,17 @@ const devfs_device_t devfs_list[] = {
 	DEVFS_DEVICE("spi1", mcu_spi, 1, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("spi2", mcu_spi, 2, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("spi3", mcu_spi, 3, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
+#endif
 
 	DEVFS_DEVICE("tmr0", mcu_tmr, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR), //TIM1
 	DEVFS_DEVICE("tmr1", mcu_tmr, 1, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR), //TIM2
-	DEVFS_DEVICE("tmr2", mcu_tmr, 2, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("tmr3", mcu_tmr, 3, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("tmr4", mcu_tmr, 4, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("tmr5", mcu_tmr, 5, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("tmr6", mcu_tmr, 6, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("tmr7", mcu_tmr, 7, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR), //TIM8
-	//Does this chip have more timers?
+	//TODO: add QTMRs and PIT
 
-	DEVFS_DEVICE("uart1", uartfifo, 0, &uart1_fifo_config, &uart1_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("uart0", uartfifo, 0, &uart0_fifo_config, &uart0_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	#if !defined __debug
-	DEVFS_DEVICE("uart2", uartfifo, 0, &uart2_fifo_config, &uart2_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("uart1", uartfifo, 1, &uart1_fifo_config, &uart1_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	#endif
-	DEVFS_DEVICE("uart5", uartfifo, 0, &uart5_fifo_config, &uart5_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("uart2", uartfifo, 2, &uart2_fifo_config, &uart2_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_TERMINATOR
 };
 

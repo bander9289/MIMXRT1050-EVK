@@ -19,6 +19,12 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 is configured as LPUART1_RX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_02_LPUART2_TX,        /* GPIO_AD_B1_02 is configured as LPUART2_TX */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_03_LPUART2_RX,        /* GPIO_AD_B1_03 is configured as LPUART2_RX */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_14_FLEXCAN2_TX,       /* GPIO_AD_B0_14 is configured as FLEXCAN2_TX */
       1U);                                    /* Software Input On Field: Force input path of pad GPIO_AD_B0_14 */
   IOMUXC_SetPinMux(

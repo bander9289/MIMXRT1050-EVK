@@ -29,7 +29,7 @@ const mcu_board_config_t mcu_board_config = {
 	.core_cpu_freq = SOS_BOARD_SYSTEM_CLOCK,
 	.core_periph_freq = SOS_BOARD_SYSTEM_CLOCK,
 	.usb_max_packet_zero = 64,
-	.debug_uart_port = 0,
+	.debug_uart_port = 1, // reserve 0/LPUART1 for Link until USB is working
 	.debug_uart_attr = {
 		.pin_assignment =
 		{
@@ -45,5 +45,5 @@ const mcu_board_config_t mcu_board_config = {
 	.o_flags = MCU_BOARD_CONFIG_FLAG_LED_ACTIVE_HIGH,
 	.event_handler = board_event_handler,
 	.led.port = 1, .led.pin = 18,
-	.o_mcu_debug = MCU_DEBUG_INFO | MCU_DEBUG_SYS
+	.o_mcu_debug = MCU_DEBUG_INFO | MCU_DEBUG_SYS | MCU_DEBUG_MALLOC | MCU_DEBUG_APPFS | MCU_DEBUG_LINK // StratifyOS/include/mcu/debug.h
 };

@@ -78,7 +78,9 @@ void board_event_handler(int event, void * args){
 
 		case MCU_BOARD_CONFIG_EVENT_START_LINK:
 			mcu_debug_log_info(MCU_DEBUG_USER1, "Start LED %d");
+#if 0 //BA: not ready for pio yet
 			sos_led_startup();
+#endif
 			break;
 
 		case MCU_BOARD_CONFIG_EVENT_START_FILESYSTEM:
