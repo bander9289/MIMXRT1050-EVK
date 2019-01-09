@@ -83,6 +83,7 @@ SOS_DECLARE_TASK_TABLE(SOS_BOARD_TASK_TOTAL);
  *
  *
  */
+#if !defined __debug //NOTE: opened for raw put() by mcu_debug mechanism if '__debug'
 //LPUART1 - EVKB evaluation board has this wired to OpenSDA USB mbed endpoint
 UARTFIFO_DECLARE_CONFIG_STATE(uart0_fifo, 1024,
 										UART_FLAG_SET_LINE_CODING_DEFAULT, 8, 115200,
@@ -91,8 +92,8 @@ UARTFIFO_DECLARE_CONFIG_STATE(uart0_fifo, 1024,
 										SOS_BOARD_USART2_TX_PORT, SOS_BOARD_USART2_TX_PIN, //TX
 										0xff, 0xff,
 										0xff, 0xff);
+#endif
 
-#if !defined __debug //NOTE: opened for raw put() by mcu_debug mechanism if '__debug'
 //LPUART2 - conflicts with SPDIF; EVKB evaluation board has this on J22
 UARTFIFO_DECLARE_CONFIG_STATE(uart1_fifo, 1024,
 										UART_FLAG_SET_LINE_CODING_DEFAULT, 8, 115200,
@@ -101,7 +102,6 @@ UARTFIFO_DECLARE_CONFIG_STATE(uart1_fifo, 1024,
 										SOS_BOARD_USART3_TX_PORT, SOS_BOARD_USART3_TX_PIN, //TX
 										0xff, 0xff,
 										0xff, 0xff);
-#endif
 
 //LPUART3 - conflicts with CSI_xSYNC; EVKB evaluation board has this on J22
 UARTFIFO_DECLARE_CONFIG_STATE(uart2_fifo, 1024,
@@ -182,10 +182,10 @@ const devfs_device_t devfs_list[] = {
 	DEVFS_DEVICE("tmr1", mcu_tmr, 1, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR), //TIM2
 	//TODO: add QTMRs and PIT
 
-	DEVFS_DEVICE("uart0", uartfifo, 0, &uart0_fifo_config, &uart0_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	#if !defined __debug
-	DEVFS_DEVICE("uart1", uartfifo, 1, &uart1_fifo_config, &uart1_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("uart0", uartfifo, 0, &uart0_fifo_config, &uart0_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	#endif
+	DEVFS_DEVICE("uart1", uartfifo, 1, &uart1_fifo_config, &uart1_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("uart2", uartfifo, 2, &uart2_fifo_config, &uart2_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_TERMINATOR
 };

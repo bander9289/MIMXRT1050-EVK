@@ -48,7 +48,7 @@ link_transport_phy_t link_transport_uart_open(const char * name, int baudrate){
 	link_transport_phy_t fd;
 	uart_attr_t attr;
 
-	fd = open("/dev/uart0", O_RDWR);
+	fd = open("/dev/uart1", O_RDWR); //NOTE: uart0 goes over USB on EVKB, which results in hardware overrun (on Windows?)
 	if( fd <  0){
 		return -1;
 	}

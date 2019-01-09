@@ -29,7 +29,7 @@ const mcu_board_config_t mcu_board_config = {
 	.core_cpu_freq = SOS_BOARD_SYSTEM_CLOCK,
 	.core_periph_freq = SOS_BOARD_SYSTEM_CLOCK,
 	.usb_max_packet_zero = 64,
-	.debug_uart_port = 1, // reserve 0/LPUART1 for Link until USB is working
+	.debug_uart_port = 0,
 	.debug_uart_attr = {
 		.pin_assignment =
 		{
