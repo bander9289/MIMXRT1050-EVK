@@ -11,4 +11,6 @@ set(SOURCES
   ${SOURCES_PREFIX}/board_symbols.c
   ${SOURCES_PREFIX}/SystemClock_Config.c
   ${SOURCES_PREFIX}/kernel_request.c
+  ${SOURCES_PREFIX}/link_transport_uart.c
+  ${SOURCES_PREFIX}/link_transport_uart.h
   PARENT_SCOPE)

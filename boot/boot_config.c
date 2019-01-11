@@ -22,13 +22,14 @@ limitations under the License.
 #include <mcu/bootloader.h>
 #include <mcu/arch.h>
 
-#include "boot_link_config.h"
+//#include "boot_link_config.h"
+#include <link_transport_uart.h>
 
 const struct __sFILE_fake __sf_fake_stdin;
 const struct __sFILE_fake __sf_fake_stdout;
 const struct __sFILE_fake __sf_fake_stderr;
 
-#include "../src/config.h"
+//#include "../src/config.h"
 //Bootloader configuration (don't need Stratify OS configuration for just the bootloader)
 //STM32_NUCLEO144_DECLARE_BOOT_BOARD_CONFIG(&link_transport);
 
@@ -41,7 +42,7 @@ const bootloader_board_config_t boot_board_config = {
 		.program_start_addr = 0x40000,
 		.hw_req.port = 0, .hw_req.pin = 16, //p14 on MBED, center joystick on xively application board
 		.o_flags = BOOT_BOARD_CONFIG_FLAG_HW_REQ_ACTIVE_HIGH | BOOT_BOARD_CONFIG_FLAG_HW_REQ_PULLDOWN,
-		.link_transport_driver = &link_transport,
+		.link_transport_driver = &link_transport_uart,
 		.id = __HARDWARE_ID
 };
 

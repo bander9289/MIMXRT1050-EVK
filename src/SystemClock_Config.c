@@ -1,8 +1,8 @@
 
 #include <mcu/arch.h>
-#include "fsl_iomuxc.h"
-#include "fsl_src.h"
-#include "fsl_semc.h"
+#include <mcu/arch/imxrt/MIMXRT1052/fsl_iomuxc.h>
+#include <mcu/arch/imxrt/MIMXRT1052/fsl_src.h>
+#include <mcu/arch/imxrt/MIMXRT1052/fsl_semc.h>
 
 #define BOARD_BOOTCLOCKRUN_CORE_CLOCK             600000000U  /*!< Core clock frequency: 600000000Hz */
 
