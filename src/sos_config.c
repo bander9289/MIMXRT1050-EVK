@@ -111,6 +111,8 @@ I2C_DECLARE_CONFIG_MASTER(i2c1,
 								  SOS_BOARD_I2C2_SDA_PORT, SOS_BOARD_I2C2_SDA_PIN, //SDA
 								  SOS_BOARD_I2C2_SCL_PORT, SOS_BOARD_I2C2_SCL_PIN); //SCL
 
+CAN_RAW_DECLARE_CONFIG_STATE(can0_raw, 500000, false);
+CAN_RAW_DECLARE_CONFIG_STATE(can1_raw, 500000, false);
 CAN_ISOTP_DECLARE_CONFIG_STATE(can0_isotp, 500000, false);
 CAN_ISOTP_DECLARE_CONFIG_STATE(can1_isotp, 500000, false);
 
@@ -175,9 +177,9 @@ const devfs_device_t devfs_list[] = {
 
 	DEVFS_DEVICE("uart2", mcu_uart, 2, &uart2_fifo_config, &uart2_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 
-	DEVFS_DEVICE("can0_raw", mcu_can, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("can0_raw", mcu_can, 0, &can0_raw_config, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("can0_isotp", can_isotp, 0, &can0_isotp_config, &can0_isotp_state, 0666, SOS_USER_ROOT, S_IFCHR),
-	DEVFS_DEVICE("can1_raw", mcu_can, 1, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("can1_raw", mcu_can, 1, &can1_raw_config, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("can1_isotp", can_isotp, 1, &can1_isotp_config, &can1_isotp_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_TERMINATOR
 };
