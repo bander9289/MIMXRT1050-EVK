@@ -201,6 +201,13 @@ void board_event_handler(int event, void * args){
 			IOMUXC_SetPinMux(
 						IOMUXC_GPIO_AD_B1_07_LPUART3_RX,
 						0U);
+			IOMUXC_SetPinMux(
+						IOMUXC_GPIO_AD_B1_04_LPUART3_CTS_B,     /* GPIO_AD_B1_04 is configured as LPUART3_CTS_B */
+						0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+			IOMUXC_SetPinMux(
+						IOMUXC_GPIO_AD_B1_05_LPUART3_RTS_B,     /* GPIO_AD_B1_05 is configured as LPUART3_RTS_B */
+						0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+
 			IOMUXC_SetPinConfig(
 						IOMUXC_GPIO_AD_B1_06_LPUART3_TX,
 						0x10B0u);
