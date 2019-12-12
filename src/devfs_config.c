@@ -126,6 +126,9 @@ const usbfifo_config_t link2_transport_usb_fifo_cfg = {
 #define LINK_CONFIG &sos_link_transport_usb_fifo_cfg
 #endif
 
+FIFO_DECLARE_CONFIG_STATE(pipe_ui, 1024);
+FIFO_DECLARE_CONFIG_STATE(pipe_cm, 1024);
+
 /* This is the list of devices that will show up in the /dev folder.
  */
 const devfs_device_t devfs_list[] = {
@@ -134,6 +137,8 @@ const devfs_device_t devfs_list[] = {
 	DEVFS_DEVICE("fifo", cfifo, 0, &board_fifo_config, &board_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("stdio-out", fifo, 0, &stdio_out_config, &stdio_out_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("stdio-in", fifo, 0, &stdio_in_config, &stdio_in_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("pipe-ui", fifo, 0, &pipe_ui_config, &pipe_ui_state, 0666, SOS_USER_ROOT, S_IFCHR),
+	DEVFS_DEVICE("pipe-cm", fifo, 0, &pipe_cm_config, &pipe_cm_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("link-phy-usb", usbfifo, SOS_BOARD_USB_PORT, LINK_CONFIG, &sos_link_transport_usb_fifo_state, 0666, SOS_USER_ROOT, S_IFCHR),
 	DEVFS_DEVICE("sys", sys, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
 	//DEVFS_DEVICE("rtc", mcu_rtc, 0, 0, 0, 0666, SOS_USER_ROOT, S_IFCHR),
