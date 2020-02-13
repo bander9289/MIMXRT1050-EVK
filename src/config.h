@@ -161,10 +161,10 @@ limitations under the License.
 #define SOS_BOARD_SD_CMD_PIN 2
 
 //#define EXT_RAM_START (0x80000000)
-#define EXT_RAM_PAGES (4*1024) //(32768) // = 32MB of RAM @ 1kb page size
+#define EXT_RAM_PAGES (32768) // = 32MB of RAM @ 1kb page size
 #define APPFS_RAM_PAGES (EXT_RAM_PAGES / 2)
 #define RAMDISK_OFFSET (APPFS_RAM_PAGES * MCU_RAM_PAGE_SIZE) // after appfs
-#define RAMDISK_PAGES (EXT_RAM_PAGES - APPFS_RAM_PAGES) / 4 //FIXME: remove /4
+#define RAMDISK_PAGES (EXT_RAM_PAGES - APPFS_RAM_PAGES)
 
 /*
  * USB bulk won't accept more than endpoint size bytes at a time.
